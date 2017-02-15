@@ -1,33 +1,71 @@
 defmodule WebSlinger.Mixfile do
   use Mix.Project
 
-  def project do
-    [app: :web_slinger,
-     version: "0.1.0",
-     elixir: "~> 1.4",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     deps: deps()]
+  #######
+  # API #
+  #######
+
+  def application() do
+    [
+      extra_applications: extra_applications(),
+    ]
   end
 
-  # Configuration for the OTP application
-  #
-  # Type "mix help compile.app" for more information
-  def application do
-    # Specify extra applications you'll use from Erlang/Elixir
-    [extra_applications: [:logger]]
+  def project() do
+    [
+      app:              app(),
+      build_embedded:   build_embedded(),
+      deps:             deps(),
+      elixir:           elixir(),
+      start_permanent:  start_permanent(),
+      version:          version(),
+    ]
   end
 
-  # Dependencies can be Hex packages:
-  #
-  #   {:my_dep, "~> 0.3.0"}
-  #
-  # Or git/path repositories:
-  #
-  #   {:my_dep, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
-  #
-  # Type "mix help deps" for more examples and options
-  defp deps do
+  ###########
+  # Private #
+  ###########
+
+  defp app() do
+    :web_slinger
+  end
+
+  defp build_embedded() do
+     Mix.env == :prod
+  end
+
+  defp deps() do
+    [
+      {:dialyxir, "~> 0.4", only: [:dev], runtime: false},
+      {:ex_doc, "~> 0.14", only: :dev},
+    ]
+  end
+
+  defp elixir() do
+    "~> 1.4"
+  end
+
+  defp extra_applications() do
+    extra_applications(Mix.env()) ++ [
+      :logger,
+    ]
+  end
+
+  defp extra_applications(:dev) do
+    [
+      :mix,
+    ]
+  end
+
+  defp extra_applications(_) do
     []
+  end
+
+  defp start_permanent() do
+    Mix.env == :prod
+  end
+
+  defp version() do
+    "0.1.0"
   end
 end
