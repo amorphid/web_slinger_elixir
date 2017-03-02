@@ -1,18 +1,13 @@
 defmodule WebSlinger do
-  @moduledoc """
-  Documentation for WebSlinger.
-  """
+  alias WebSlinger.Request
 
-  @doc """
-  Hello world.
+  def get(uri, opts) do
+    request(:get, uri, opts)
+  end
 
-  ## Examples
-
-      iex> WebSlinger.hello
-      :world
-
-  """
-  def hello do
-    :world
+  def request(method, uri, opts) do
+    %Request{}
+    |> Request.build(method, uri, opts)
+    |> Request.encode()
   end
 end
